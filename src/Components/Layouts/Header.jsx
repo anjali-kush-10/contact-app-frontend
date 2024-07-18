@@ -1,22 +1,33 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 // import { Navigate } from 'react-router-dom';
 
 const Header = () => {
-    const authToken = localStorage.getItem('token');
+
+    const dispatch = useDispatch();
+
+    const userData = useSelector((state) => state.authReducer.userData)
+    const authToken = useSelector((data) => data.authReducer.userToken);
+
+    const role = JSON?.parse(localStorage?.getItem('role'));
+
+    // const authToken = localStorage.getItem('token');
     const userName = localStorage.getItem('name');
-    const role = JSON.parse(localStorage.getItem('role'))
     const navigate = useNavigate();
 
+
     const removeData = () => {
-        localStorage.removeItem('name');
-        localStorage.removeItem('image');
-        localStorage.removeItem('role');
-        localStorage.removeItem('token');
+        // localStorage.removeItem('name');
+        // localStorage.removeItem('image');
+        // localStorage.removeItem('role');
+        // localStorage.removeItem('token');
+        dispatch({ type: "LOGOUT_USER" })
         navigate('/login');
 
     }
 
+    // console.log("userData: ", userData, authToken, userName);
 
     return (
         <div className="nk-header nk-header-fixed is-light">

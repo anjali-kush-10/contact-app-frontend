@@ -8,9 +8,32 @@ import AdminPanel from './Components/AdminPanel';
 import ManageContact from './Components/ManageContact';
 import ManageUsers from './Components/ManageUsers';
 import ViewContact from './Components/ViewContact';
-
+import axios from 'axios';
+import { useEffect } from 'react';
 
 function App() {
+
+  const authToken = localStorage.getItem('token');
+
+  const apiHeader = {
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  }
+
+  const fetchPermission = () => {
+    axios.get("http://localhost:4000/user/fetch-permission", apiHeader)
+      .then((response) => {
+        localStorage.setItem('role', JSON.stringify(response.data.data));
+      }).catch((error) => {
+        console.log(error.message);
+      });
+  }
+
+  useEffect(() => {
+    fetchPermission()
+  }, [])
+
   return (
     <>
       <Auth />

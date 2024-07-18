@@ -9,15 +9,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDropzone } from 'react-dropzone';
 import { Image } from 'antd';
+import { useSelector } from 'react-redux';
 
 
 const ManageContact = () => {
 
+    const userData = useSelector((state) => state.authReducer.userData);
+    const authToken = useSelector((data) => data.authReducer.userToken);
+
     const [data, setData] = useState([]);
     const [myPermission, setMyPermission] = useState([]);
     const [search, setSearch] = useState("");
-
-    const role = JSON.parse(localStorage.getItem('role'));
 
     const [id, setID] = useState();
 
@@ -27,13 +29,14 @@ const ManageContact = () => {
     const [perPageLimit, setPerPageLimit] = useState(5);
     const [totalPage, setTotalPage] = useState(1);
 
-    const authToken = localStorage.getItem('token');
+    // const authToken = localStorage.getItem('token');
 
     useEffect(() => {
+        const role = JSON.parse(localStorage.getItem('role'));
         if (role?.my_permission) {
             setMyPermission(role?.my_permission?.permission)
         }
-    }, [role])
+    }, [])
 
 
     const apiHeader = {
@@ -183,7 +186,7 @@ const ManageContact = () => {
                                                                 <td>{item.name}</td>
                                                                 <td>{item.contact_no}</td>
                                                                 <td>{item.address}</td>
-                                                                <td>{item.user_data.name} </td>
+                                                                <td>{item.user_data.name}</td>
                                                                 <td className="tb-ord-action">
 
                                                                     <div className="tb-odr-btns d-none d-md-inline">
@@ -212,6 +215,8 @@ const ManageContact = () => {
                                                                             ><i class="fa-sharp fa-solid fa-pen ms-1"></i></button>
                                                                         </div>
                                                                     }
+
+
                                                                     {myPermission.some((key) => key === 4) &&
                                                                         <div className="tb-odr-btns d-none d-md-inline">
                                                                             <button className="btn btn-sm btn ms-1"
@@ -220,7 +225,6 @@ const ManageContact = () => {
                                                                             ><i class="fa-solid fa-trash ms-1"></i></button>
                                                                         </div>
                                                                     }
-
                                                                 </td>
                                                             </tr>
                                                         ))

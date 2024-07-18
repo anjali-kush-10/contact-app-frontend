@@ -5,9 +5,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Formik, Form, ErrorMessage, Field } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+// import { loginUser } from '../Action/actionCreator';
 
 
 const Login = () => {
+
+  const dispatch = useDispatch();
+
+  const userData = useSelector((state) => state.authReducer.userData);
+  const authToken = useSelector((data) => data.authReducer.userToken);
+
+
   const navigate = useNavigate();
 
   const loginInitialValues = {
@@ -21,19 +30,33 @@ const Login = () => {
   })
 
   const loginOnSubmit = (values) => {
+    // const result = await dispatch(loginUser(values))
+    // if (result.status === true) {
+    //   navigate('/')
+    //   toast.success("Logged in Successfully")
+    // }
+    // else {
+    //   toast.error(result.error.message);
+    // }
+
     axios.post("http://localhost:4000/user/login", values).then((response) => {
-      // console.log(response);
+      // console.log(response, "---------->response");
+
       localStorage.setItem('name', response.data.data.name);
       localStorage.setItem('image', response.data.data.image);
       localStorage.setItem('role', JSON.stringify(response.data.data.role_data));
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('id', response.data.data.id);
-      toast.success(response.data.message);
+
+      dispatch({ type: "UPDATE_USER", data: response.data })
+
+
       navigate('/');
     }).catch((error) => {
       toast.error(error.message);
     })
   }
+
   // useEffect=()=>{
   //   var authToken=localStorage.getItem('token');
   //   if(authToken)
@@ -41,6 +64,10 @@ const Login = () => {
   //       navigate('/');
   //     }
   // }
+
+  console.log("authReducer:--------", userData, authToken);
+
+
 
   return (
     <>

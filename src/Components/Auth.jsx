@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
 const Auth = () => {
+
+    const userData = useSelector((state) => state.authReducer.userData);
+    const authToken = useSelector((data) => data.authReducer.userToken);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +25,8 @@ const Auth = () => {
     }, []);
 
     return (
-        <></>
+        <>
+        </>
     )
 }
 

@@ -9,11 +9,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 import { Image } from 'antd';
-// import Password from 'antd/es/input/Password';
-// import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+
 
 
 const ManageUsers = () => {
+
+    const userData = useSelector((state) => state.authReducer.userData);
+    const authToken = useSelector((data) => data.authReducer.userToken);
 
     const [data, setData] = useState([]);
     const [search, setSearch] = useState("");
@@ -28,17 +31,17 @@ const ManageUsers = () => {
     const [totalPage, setTotalPage] = useState(1);
 
     const [myPermission, setMyPermission] = useState([]);
-    const role = JSON.parse(localStorage.getItem('role'));
-    console.log(role, "==========>role");
+
 
 
     useEffect(() => {
+        const role = JSON.parse(localStorage.getItem('role'));
         if (role?.my_permission) {
-            setMyPermission(role?.my_permission?.permission);
+            setMyPermission(role?.my_permission?.permission)
         }
     }, []);
 
-    const authToken = localStorage.getItem('token');
+    // const authToken = localStorage.getItem('token');
 
     const apiHeader = {
         headers: {
@@ -170,10 +173,7 @@ const ManageUsers = () => {
 
     });
 
-
-
-
-
+    console.log('userData==========>', userData, authToken);
 
     return (
         <>
@@ -194,11 +194,14 @@ const ManageUsers = () => {
                                         onChange={(e) => setSearch(e.target.value)}
                                     // style={{ backgroundColor: "grey", color: "white" }}
                                     />
-                                    <button className='btn btn-primary'
-                                        style={{ marginLeft: "700px" }}
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#addUserModalForm"
-                                    >Add User</button>
+                                    {
+                                        myPermission.some((key) => (key === 2)) &&
+                                        <button className='btn btn-primary'
+                                            style={{ marginLeft: "700px" }}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#addUserModalForm"
+                                        >Add User</button>
+                                    }
                                 </div>
                                 <br />
                                 <div>
@@ -239,6 +242,7 @@ const ManageUsers = () => {
                                                                         ><i class="fa-solid fa-circle-user ms-1"></i></button>
                                                                     </div>
                                                                     {myPermission.some((key) => (key === 3)) &&
+
                                                                         <div className="tb-odr-btns d-none d-md-inline ms-1">
                                                                             <button className="btn btn-sm btn-secondary"
                                                                                 data-bs-toggle="modal"
@@ -252,18 +256,22 @@ const ManageUsers = () => {
                                                                                 }}
                                                                             ><i class="fa-solid fa-user-pen ms-1"></i></button>
                                                                         </div>
+
                                                                     }
-                                                                    <div className="tb-odr-btns d-none d-md-inline">
-                                                                        <button className="btn btn-sm btn-info ms-1"
-                                                                            data-bs-target="#changePasswordModal"
-                                                                            onClick={() => {
-                                                                                changePassword.setFieldValue('newpassword', item.newPassword);
-                                                                                changePassword.setFieldValue('confirmpassword', item.confirmPassword);
-                                                                                setID(item.id);
-                                                                                setChangePassModal(true)
-                                                                            }}
-                                                                        ><i class="fa-solid fa-key ms-1"></i></button>
-                                                                    </div>
+                                                                    {
+                                                                        myPermission.some((key) => (key === 3)) &&
+                                                                        <div className="tb-odr-btns d-none d-md-inline">
+                                                                            <button className="btn btn-sm btn-info ms-1"
+                                                                                data-bs-target="#changePasswordModal"
+                                                                                onClick={() => {
+                                                                                    changePassword.setFieldValue('newpassword', item.newPassword);
+                                                                                    changePassword.setFieldValue('confirmpassword', item.confirmPassword);
+                                                                                    setID(item.id);
+                                                                                    setChangePassModal(true)
+                                                                                }}
+                                                                            ><i class="fa-solid fa-key ms-1"></i></button>
+                                                                        </div>
+                                                                    }
 
                                                                 </td>
                                                                 <td>
@@ -423,7 +431,6 @@ const ManageUsers = () => {
                         </div>
                         <div className='modal-backdrop show'></div>
                     </>
-
                 }
 
 

@@ -3,8 +3,11 @@ import Container from './Layouts/Container'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Image } from 'antd';
+import { useSelector } from 'react-redux';
 
 const ViewContact = () => {
+    const userData = useSelector((state) => state.authReducer.userData);
+    const authToken = useSelector((data) => data.authReducer.userToken);
 
     const [data, setData] = useState([]);
 
@@ -13,7 +16,7 @@ const ViewContact = () => {
     const { id } = useParams();
 
 
-    const authToken = localStorage.getItem('token');
+    // const authToken = localStorage.getItem('token');
 
     const apiHeader = {
         headers: {
@@ -34,6 +37,7 @@ const ViewContact = () => {
     useEffect(() => {
         viewUserContact(search);
     }, [search]);
+
 
     return (
         <>
